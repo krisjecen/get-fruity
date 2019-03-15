@@ -6,22 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- edit this later -->
     <title>word guess game</title>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     
-    <style>
-            #currentWord {
-                color: green;
-                font-weight: bold;
-                letter-spacing: 0.5em;
-            }
-        </style>
 <body>
     <!-- can I use separate divs for each letter that will be guessed -->
-    <!-- and use monotype (?) font for even spacing whether the letters -->
-    <!-- are hidden or showing? use a standard "blank" image to cover each letter-->
-    <!-- if the key pressed matches one of the letters in the word, unhide the "blank" -->
-    <!-- to reveal the letter below. set widths for each letter / each div? initially -->
-    <!-- i don't like the width adjustment as the letters get revealed, would rather it -->
-    <!-- look Wheel of Fortune style -->
+    <!-- so far I have used letter-spacing in css to space out my letters / underscores-->
 
     <!-- background image for the whole game -->
 
@@ -46,10 +36,12 @@
     
     <!-- right section: main gameplay area -->
         <div id="gameplay">
-            <p>gameplay div text - Press any key to begin / Press letter keys to reveal letters</p>
 
             <!-- Press any key to begin -->
+            <div id="instructions">
+            <!-- <p>gameplay div text - Press any key to begin / </p> -->
             <!-- maybe it^^ could change to say "Guess the word before you run out of chances" -->
+            </div>
 
             <!-- Wins (counter ) -->
             <div id="winsCount">
@@ -59,17 +51,14 @@
             <!-- Current word -->
             <!-- simplified test case: a single letter that is hidden until typed -->
             <div id="currentWord">
-                <p>[current word]</p>
             </div>
 
             <!-- You have # guesses remaining -->
             <div id="remainingGuesses">
-                <p>[number of wrong guesses remaining]</p>
             </div>
 
             <!-- Letters guessed -->
             <div id="wrongLetters">
-                <p>[list of letters guessed that aren't in the current word]</p>
             </div>
 
         </div>

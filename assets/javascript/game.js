@@ -10,21 +10,27 @@ var winsCounter = 0;
 var remChances = 12;
 var initialKeyPress = 0;
 
+// define a set of words for the game, one will be picked at the beginning of each game
 
-// define a replaceAt function
+// generate a string of only "_" characters to match each word string
+// these will function as the wordSet and wordBeingGuessed
+
+
+// define a replaceAt function (found at https://gist.github.com/efenacigiray/9367920)
 
 function replaceAt(string, index, replace) {
     return string.substring(0, index) + replace + string.substring(index + 1);
-  }
+}
 
-// targeting the location for displaying the current word
-// var targetDiv = ; could take this out if i can just insert text into the document
-// same thing happened below, we were able to remove the wrongDiv variable like we
-// removed the targetDiv variable
 
 // winning message
 var winMessage = document.createElement("div");
 winMessage.textContent = (`You've won!`);
+
+// initial instruction text "Press any key to begin"
+var instructionText = document.createElement("div");
+instructionText.textContent = (`Press any key to begin`);
+document.getElementById("instructions").appendChild(instructionText);
 
 // wins -- how many times the player has won -- inserting text content
 var displayWins = document.createElement("div");
@@ -52,6 +58,7 @@ document.getElementById("wrongLetters").appendChild(letterGuessed);
 
 document.onkeyup = (event) => {
     // initial change of text once user starts playing the game
+    instructionText.textContent = ('Press letter keys to reveal letters before you run out of chances');
 
     // change the key press value to lowercase
     var userPlay = event.key.toLowerCase();
@@ -85,6 +92,10 @@ document.onkeyup = (event) => {
                 // update the displayed text of winsCounter: 
                 displayWins.textContent = (`Wins: ${winsCounter}`);
                 // reset the game to a new puzzle, but for now we will reset to the current puzzle
+
+                // redisplay "press any key to begin" in case they've hit F5
+                instructionText.textContent = (`Press any key to begin`);
+
             }
 
 
@@ -122,6 +133,9 @@ document.onkeyup = (event) => {
                     letterGuessed.textContent = (`You've guessed: `);
                     // clear out the wrongLetters array
                     wrongLetters = [];
+                    // redisplay "press any key to begin"
+                    instructionText.textContent = (`Press any key to begin`);
+
                     
                 }
             }
@@ -134,33 +148,4 @@ document.onkeyup = (event) => {
 }
 
 
-//targetDiv.appendChild(gameArea);
-
 console.log(gameArea.textContent);
-
-
-
-// can use to insert "gameArea" content (wordset) before the id that "testLoc" has grabbed
-// in this case, before the #gameplay div element
-//var testLoc = document.getElementById("gameplay");
-//targetDiv.insertBefore(gameArea,testLoc);
-
-// copied as a test from w3schools
-// var para = document.createElement("p");
-// var node = document.createTextNode("This is again new.");
-// para.appendChild(node);
-
-// var element = document.getElementById("container");
-// element.appendChild(para);
-
-//
-
-// var targetDiv = document.getElementById("gameplay");
-// var wordDiv = document.createElement("div")
-
-// wordDiv.textContent = wordset[0];
-
-// targetDiv.appendChild(wordDiv);
-
-// <!-- Press any key to begin -->
-// <!-- maybe it^^ could change to say "Guess the word before you run out of chances" -->

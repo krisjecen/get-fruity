@@ -1,0 +1,9 @@
+h1 {
+    font-size: large;
+}
+
+#currentWord {
+    color: green;
+    font-weight: bold;
+    letter-spacing: 0.5em;
+}
