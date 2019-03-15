@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- edit this later -->
+    <title>word guess game</title>
+</head>
+<body>
+    <!-- can I use separate divs for each letter that will be guessed -->
+    <!-- and use monotype (?) font for even spacing whether the letters -->
+    <!-- are hidden or showing? use a standard "blank" image to cover each letter-->
+    <!-- if the key pressed matches one of the letters in the word, unhide the "blank" -->
+    <!-- to reveal the letter below. set widths for each letter / each div? initially -->
+    <!-- i don't like the width adjustment as the letters get revealed, would rather it -->
+    <!-- look Wheel of Fortune style -->
+
+    <!-- background image for the whole game -->
+
+    <!-- title of the game at the top with an image -->
+    <h1>word guess game - under construction!</h1>
+    <!-- main content in a single container? -->
+    <div id="container">
+    <p>testing main container text</p>
+    <p>testing more text in main container div</p>
+    
+    <!-- two sections of content side by side?-->
+
+        
+    <!-- left section for game status / celebration / game over -->
+        <div id="gamestatus">
+            <p>gamestatus div text (move to left side) </p>
+            <!-- some celebratory image or game over image -->
+            <!-- could have a countdown / fall-away (visualizing the remaining chances) during gameplay -->
+        </div>
+    
+    
+    
+    <!-- right section: main gameplay area -->
+        <div id="gameplay">
+            <p>gameplay div text - Press any key to begin / Press letter keys to reveal letters</p>
+
+    <!-- Press any key to begin -->
+    <!-- maybe it^^ could change to say "Guess the word before you run out of chances" -->
+
+    <!-- Wins (counter ) -->
+
+    <!-- Current word -->
+    <!-- simplified test case: a single letter that is hidden until typed -->
+        <div id="currentWord">
+            <p>[current word]</p>
+        </div>
+
+    <!-- You have # guesses remaining -->
+        <div id="remainingGuesses">
+            <p>[number of wrong guesses remaining]</p>
+        </div>
+
+    <!-- Letters guessed -->
+        <div id="wrongLetters">
+            <p>[list of letters guessed that aren't in the current word]</p>
+        </div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript" src="assets/javascript/game.js"></script>
+    
+
+</body>
+</html>
