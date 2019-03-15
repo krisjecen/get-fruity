@@ -6,7 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- edit this later -->
     <title>word guess game</title>
-</head>
+    
+    <style>
+            #currentWord {
+                color: green;
+                font-weight: bold;
+                letter-spacing: 0.5em;
+            }
+        </style>
 <body>
     <!-- can I use separate divs for each letter that will be guessed -->
     <!-- and use monotype (?) font for even spacing whether the letters -->
@@ -41,26 +48,29 @@
         <div id="gameplay">
             <p>gameplay div text - Press any key to begin / Press letter keys to reveal letters</p>
 
-    <!-- Press any key to begin -->
-    <!-- maybe it^^ could change to say "Guess the word before you run out of chances" -->
+            <!-- Press any key to begin -->
+            <!-- maybe it^^ could change to say "Guess the word before you run out of chances" -->
 
-    <!-- Wins (counter ) -->
+            <!-- Wins (counter ) -->
+            <div id="winsCount">
 
-    <!-- Current word -->
-    <!-- simplified test case: a single letter that is hidden until typed -->
-        <div id="currentWord">
-            <p>[current word]</p>
-        </div>
+            </div>
 
-    <!-- You have # guesses remaining -->
-        <div id="remainingGuesses">
-            <p>[number of wrong guesses remaining]</p>
-        </div>
+            <!-- Current word -->
+            <!-- simplified test case: a single letter that is hidden until typed -->
+            <div id="currentWord">
+                <p>[current word]</p>
+            </div>
 
-    <!-- Letters guessed -->
-        <div id="wrongLetters">
-            <p>[list of letters guessed that aren't in the current word]</p>
-        </div>
+            <!-- You have # guesses remaining -->
+            <div id="remainingGuesses">
+                <p>[number of wrong guesses remaining]</p>
+            </div>
+
+            <!-- Letters guessed -->
+            <div id="wrongLetters">
+                <p>[list of letters guessed that aren't in the current word]</p>
+            </div>
 
         </div>
 

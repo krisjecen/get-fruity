@@ -3,27 +3,44 @@
 
 // initialize variables
 
-var blankSet = ["_"];
-var wordSet = ["a"];
+var wordBeingGuessed = "_____";
+var wordSet = "apple";
 var wrongLetters = [];
-var winsCount = 0;
+var winsCounter = 0;
 var remChances = 12;
+var initialKeyPress = 0;
+
+
+// define a replaceAt function
+
+function replaceAt(string, index, replace) {
+    return string.substring(0, index) + replace + string.substring(index + 1);
+  }
 
 // targeting the location for displaying the current word
 // var targetDiv = ; could take this out if i can just insert text into the document
 // same thing happened below, we were able to remove the wrongDiv variable like we
 // removed the targetDiv variable
-// creating a div element in the current word area
+
+// winning message
+var winMessage = document.createElement("div");
+winMessage.textContent = (`You've won!`);
+
+// wins -- how many times the player has won -- inserting text content
+var displayWins = document.createElement("div");
+displayWins.textContent = (`Wins: ${winsCounter}`);
+document.getElementById("winsCount").appendChild(displayWins);
+
+// creating the current word area
 var gameArea = document.createElement("div");
 // inserting text content, in this simplified case, one underscore
-gameArea.textContent = blankSet;
+gameArea.textContent = wordBeingGuessed;
 document.getElementById("currentWord").appendChild(gameArea);
 
-// remaining guesses/chances -- inserting text content
+// display remaining chances (countdown) -- inserting text content
 var remaining = document.createElement("div");
 remaining.textContent = (`Chances: ${remChances}`);
 document.getElementById("remainingGuesses").appendChild(remaining);
-
 
 // targeting the location for displaying guessed letters that aren't in the current word
 //var wrongDiv = ;
@@ -32,22 +49,45 @@ var letterGuessed = document.createElement("div");
 letterGuessed.textContent = (`You've guessed: `);
 document.getElementById("wrongLetters").appendChild(letterGuessed);
 
-// when the user presses a key, if that key is the letter "a", then reveal the "a"
-// otherwise leave the blank / underscore and console log "there is no [key pressed] in the word"
-//gameArea.textContent = wordSet;
 
 document.onkeyup = (event) => {
-    // consider making an if statement about if the key pressed is a letter key
-    // look up javascript keycodes & look in slack resources
+    // initial change of text once user starts playing the game
+
+    // change the key press value to lowercase
     var userPlay = event.key.toLowerCase();
 
-    // check that the userPlay is a letter, not some other key. this helped in not displaying F5 ^_^;;
+    // check that the userPlay is a letter, not some other key (e.g. a number, symbol, F5)
     if ("abcdefghijklmnopqrstuvwxyz".includes(userPlay)) {
-        console.log(userPlay);
+        console.log(userPlay); // can remove at end
 
-        // does the userplay match the current word?
-        if (userPlay === "a") {
-            gameArea.textContent = wordSet;
+        // does the userPlay match a character in the current word?
+        if (wordSet.includes(userPlay)) {
+            // walk through the wordSet (current word) letter by letter
+            for (var i = 0; i < wordSet.length; i++) {
+                // if the userPlay is the same as the character at that index in the current word
+                if (userPlay === wordSet[i]) {
+                    // take the in-progress word, go to the indexed character, and
+                    // replace it with the userPlay
+                    wordBeingGuessed = replaceAt(wordBeingGuessed, i, userPlay);
+                    // update the text content with the letter that the user guessed correctly
+                    gameArea.textContent = wordBeingGuessed;
+                    console.log(wordBeingGuessed);  
+                }
+                
+            }
+            
+            // if there are no more letters remaining to be guessed (the current word has no more blanks)
+            if (wordBeingGuessed.includes("_") == false) {
+                // display a winning message
+                document.getElementById("gamestatus").appendChild(winMessage);
+                // increment the wins counter by +1 
+                winsCounter += 1;
+                // update the displayed text of winsCounter: 
+                displayWins.textContent = (`Wins: ${winsCounter}`);
+                // reset the game to a new puzzle, but for now we will reset to the current puzzle
+            }
+
+
         }
         else {
             // exclude letters already guessed from getting added again
@@ -68,7 +108,7 @@ document.onkeyup = (event) => {
                 }
 
 
-            // if the player runs out of chances, what do we do?
+                // if the player runs out of chances, what do we do?
                 if (remChances === 0) {
                     // the line below doesn't display as Chances: 0 at all  ._.
                     remaining.textContent = (`Chances: ${remChances}`);
@@ -76,9 +116,8 @@ document.onkeyup = (event) => {
                     console.log("game over :(");
                     // reset the chances to 12 so they can play again
                     remChances = 12;
-                    remaining.textContent = (`Chances: ${remChances}`);
                     // assign a new word to the current word slot (underscores)
-                    gameArea.textContent = blankSet;
+                    gameArea.textContent = wordBeingGuessed;
                     // reset the wrong guesses area
                     letterGuessed.textContent = (`You've guessed: `);
                     // clear out the wrongLetters array
@@ -98,7 +137,6 @@ document.onkeyup = (event) => {
 //targetDiv.appendChild(gameArea);
 
 console.log(gameArea.textContent);
-console.log(wordSet[0]);
 
 
 
@@ -126,13 +164,3 @@ console.log(wordSet[0]);
 
 // <!-- Press any key to begin -->
 // <!-- maybe it^^ could change to say "Guess the word before you run out of chances" -->
-
-// <!-- Wins (counter ) -->
-
-// <!-- Current word -->
-// <!-- simplified test case: a single letter that is hidden until typed -->
-
-
-// <!-- You have # guesses remaining -->
-
-// <!-- Letters guessed -->
