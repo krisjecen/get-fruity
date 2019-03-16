@@ -3,14 +3,26 @@
 
 // initialize variables
 
-var wordBeingGuessed = "_____";
-var wordSet = "apple";
+//var wordBeingGuessed = "_____";
+//var wordSet = "apple";
 var wrongLetters = [];
 var winsCounter = 0;
 var remChances = 12;
-var initialKeyPress = 0;
 
 // define a set of words for the game, one will be picked at the beginning of each game
+//var puzzleSet = ["pear", "apple", "persimmon", "canteloupe",];
+// var currentWord = "";
+
+var wordSet = ["pear", "apple", "persimmon", "canteloupe",];
+var currentWord = "";
+var wordBeingGuessed = "";
+
+// we've set up a selector to pick one of the puzzles from the newly expanded wordSet
+// and assign it to our currentWord variable -- our puzzle solution
+var random = Math.floor(Math.random() * (wordSet.length));
+console.log(random);
+currentWord = wordSet[random];
+console.log(`currentWord: ${currentWord}`);
 
 // generate a string of only "_" characters to match each word string
 // these will function as the wordSet and wordBeingGuessed
@@ -22,6 +34,16 @@ function replaceAt(string, index, replace) {
     return string.substring(0, index) + replace + string.substring(index + 1);
 }
 
+
+// generating the "blank" string of underscores from the selected puzzle word
+// take the currentWord and make wordBeingGuessed equal to it (to get the right length)
+// then replace every character of wordBeingGuessed (the in-progres version that changes) with underscores "_"
+var wordBeingGuessed = currentWord;
+
+for (let j = 0; j < currentWord.length; j++) {
+    wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
+    console.log(wordBeingGuessed);
+}
 
 // winning message
 var winMessage = document.createElement("div");
@@ -68,11 +90,11 @@ document.onkeyup = (event) => {
         console.log(userPlay); // can remove at end
 
         // does the userPlay match a character in the current word?
-        if (wordSet.includes(userPlay)) {
+        if (currentWord.includes(userPlay)) {
             // walk through the wordSet (current word) letter by letter
-            for (var i = 0; i < wordSet.length; i++) {
+            for (var i = 0; i < currentWord.length; i++) {
                 // if the userPlay is the same as the character at that index in the current word
-                if (userPlay === wordSet[i]) {
+                if (userPlay === currentWord[i]) {
                     // take the in-progress word, go to the indexed character, and
                     // replace it with the userPlay
                     wordBeingGuessed = replaceAt(wordBeingGuessed, i, userPlay);
@@ -121,14 +143,12 @@ document.onkeyup = (event) => {
 
                 // if the player runs out of chances, what do we do?
                 if (remChances === 0) {
-                    // the line below doesn't display as Chances: 0 at all  ._.
-                    remaining.textContent = (`Chances: ${remChances}`);
                     // tell them that the game is over
                     console.log("game over :(");
                     // reset the chances to 12 so they can play again
                     remChances = 12;
-                    // assign a new word to the current word slot (underscores)
-                    gameArea.textContent = wordBeingGuessed;
+                    // the line below doesn't display as Chances: 0 at all  ._.
+                    remaining.textContent = (`Chances: ${remChances}`);
                     // reset the wrong guesses area
                     letterGuessed.textContent = (`You've guessed: `);
                     // clear out the wrongLetters array
@@ -136,6 +156,19 @@ document.onkeyup = (event) => {
                     // redisplay "press any key to begin"
                     instructionText.textContent = (`Press any key to begin`);
 
+                    // reset the game to display a new puzzle to solve -- i need to turn this into a function to call
+                    // select a new currentWord
+                    var random = Math.floor(Math.random() * (wordSet.length));
+                    currentWord = wordSet[random];
+                    // create a new wordBeingGuessed string -- wordBeingGuessed needs to be reset to emptystring each time
+                    // before it is rebuilt -- somehow it got built as _ _ _ _ _ which was p e a r e, the e from apple
+                    // had stuck around -- yikes
+                    for (let j = 0; j < currentWord.length; j++) {
+                        wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
+                        console.log(wordBeingGuessed);
+                    }
+                    // assign a new word to the current word slot (underscores)
+                    gameArea.textContent = wordBeingGuessed;
                     
                 }
             }
