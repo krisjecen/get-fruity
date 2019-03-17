@@ -10,7 +10,9 @@ var currentWord = "";   //  initializing the chosen word (to be guessed) as an e
 var wordBeingGuessed = "";  // initializing the in-progress word (will be shown as a underscores "_") as an empty string
 //
 // the set of words used in Get Fruity's puzzles, one will be picked at random at the beginning of each game
-var wordSet = ["pear", "apple", "persimmon", "canteloupe", "pineapple", "durian", "avocado", "cranberry", "pomegranate"];
+var wordSet = ["pear", "apple", "persimmon", "canteloupe", "pineapple", "durian", "avocado",
+"cranberry", "pomegranate", "jackfruit", "cherry", "papaya", "mango", "honeydew", "apricot", 
+"lychee", "pomelo", "kiwi"];
 //
 // end of variables
 
