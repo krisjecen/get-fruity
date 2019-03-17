@@ -1,78 +1,117 @@
-//  very simple arrays of one letter and one underscore to represent the puzzle environment
+//  javaScript for Get Fruity! the word guess game
 "use strict"
 
 // initialize variables
 
-//var wordBeingGuessed = "_____";
-//var wordSet = "apple";
-var wrongLetters = [];
-var winsCounter = 0;
-var remChances = 12;
+var wrongLetters = [];  //  empty set that will hold incorrect letter guesses
+var winsCounter = 0;    //  counter for how many times the player has won
+var remChances = 10;    //  counter for remaining chances (how many more times the player can guess before they lose)
+var currentWord = "";   //  initializing the chosen word (to be guessed) as an empty string
+var wordBeingGuessed = "";  // initializing the in-progress word (will be shown as a underscores "_") as an empty string
 
-// define a set of words for the game, one will be picked at the beginning of each game
-//var puzzleSet = ["pear", "apple", "persimmon", "canteloupe",];
-// var currentWord = "";
+// the set of words used in Get Fruity's puzzles, one will be picked at random at the beginning of each game
+var wordSet = ["pear", "apple", "persimmon", "canteloupe", "pineapple", "durian", "avocado", "cranberry", "pomegranate"];
 
-var wordSet = ["pear", "apple", "persimmon", "canteloupe",];
-var currentWord = "";
-var wordBeingGuessed = "";
-
-// we've set up a selector to pick one of the puzzles from the newly expanded wordSet
-// and assign it to our currentWord variable -- our puzzle solution
+// selector to pick one of the puzzles from the newly expanded wordSet
 var random = Math.floor(Math.random() * (wordSet.length));
 console.log(random);
+// and assign it to our currentWord variable -- our puzzle solution
 currentWord = wordSet[random];
 console.log(`currentWord: ${currentWord}`);
 
-// generate a string of only "_" characters to match each word string
-// these will function as the wordSet and wordBeingGuessed
-
-
 // define a replaceAt function (found at https://gist.github.com/efenacigiray/9367920)
+// for
+// 1. creating our initial string of underscores, and
+// 2. for updating the wordBeingGuesses to reveal correctly guessed letters.
 
 function replaceAt(string, index, replace) {
     return string.substring(0, index) + replace + string.substring(index + 1);
 }
 
+// newPuzzle function: resets the game (called after you've won or lost)
+// the wins count & win/loss message display are handled separately
+
+function newPuzzle() {
+    // select a new puzzle from wordSet (currentWord)
+    // -- preferably one that hasn't been chosen yet! -- but this isn't a priority
+    var random = Math.floor(Math.random() * (wordSet.length));
+    console.log(random);
+    currentWord = wordSet[random];
+    console.log(`currentWord: ${currentWord}`);
+
+    // reset wordBeingGuessed to "" to avoid word-length overwrite problems
+    wordBeingGuessed = "";
+    
+    // set wordBeingGuessed to the currentWord, which will get overwritten in the
+    // following for loop
+    wordBeingGuessed = currentWord;
+    
+    // generate a new string of underscores to go along with the newly
+    // selected puzzle
+    for (let j = 0; j < currentWord.length; j++) {
+        wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
+        console.log(wordBeingGuessed);
+    }
+
+    // clear out the "you've guessed" text area
+    letterGuessed.textContent = (`You've guessed: `);
+
+    // empty / reset the wrongLetters array
+    wrongLetters = [];
+
+    // reset the instruction text to "press any key..."
+    instructionText.textContent = (`Press any key to begin`);
+
+    // reset the remaining chances
+    remChances = 10;
+    // display the reset chances
+    remaining.textContent = (`Chances: ${remChances}`);
+
+    // update the gameplay area to show the new string of underscores
+    gameArea.textContent = wordBeingGuessed;
+}
+
+
 
 // generating the "blank" string of underscores from the selected puzzle word
-// take the currentWord and make wordBeingGuessed equal to it (to get the right length)
-// then replace every character of wordBeingGuessed (the in-progres version that changes) with underscores "_"
-var wordBeingGuessed = currentWord;
+//
+// take the currentWord and set wordBeingGuessed to its (string) value (to get the right length)
+wordBeingGuessed = currentWord;
 
+// then replace every character of wordBeingGuessed (the in-progres version that changes) with underscores "_"
 for (let j = 0; j < currentWord.length; j++) {
     wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
     console.log(wordBeingGuessed);
 }
 
-// winning message
-var winMessage = document.createElement("div");
-winMessage.textContent = (`You've won!`);
+// creating divs for game text content -- all of which updates as gameplay progresses
+//
+// win/loss message area -- updates when the player wins or loses
+var winLossMessage = document.createElement("div");
+winLossMessage.textContent = (``);
+document.getElementById("gamestatus").appendChild(winLossMessage);
 
-// initial instruction text "Press any key to begin"
+// initial instruction text area -- updates once user starts playing
 var instructionText = document.createElement("div");
 instructionText.textContent = (`Press any key to begin`);
 document.getElementById("instructions").appendChild(instructionText);
 
-// wins -- how many times the player has won -- inserting text content
+// wins count area -- how many times the player has won -- updates after player wins
 var displayWins = document.createElement("div");
 displayWins.textContent = (`Wins: ${winsCounter}`);
 document.getElementById("winsCount").appendChild(displayWins);
 
-// creating the current word area
+// current word area & inserting the string of underscores (wordBeingGuessed) -- reveals letters with correct guesses
 var gameArea = document.createElement("div");
-// inserting text content, in this simplified case, one underscore
 gameArea.textContent = wordBeingGuessed;
 document.getElementById("currentWord").appendChild(gameArea);
 
-// display remaining chances (countdown) -- inserting text content
+// remaining chances (countdown) area -- updates as player guesses incorrectly
 var remaining = document.createElement("div");
 remaining.textContent = (`Chances: ${remChances}`);
 document.getElementById("remainingGuesses").appendChild(remaining);
 
-// targeting the location for displaying guessed letters that aren't in the current word
-//var wrongDiv = ;
-// creating a div element in the area for letters guessed
+// displaying incorrect letter guesses -- updates as player guesses incorrectly
 var letterGuessed = document.createElement("div");
 letterGuessed.textContent = (`You've guessed: `);
 document.getElementById("wrongLetters").appendChild(letterGuessed);
@@ -80,7 +119,8 @@ document.getElementById("wrongLetters").appendChild(letterGuessed);
 
 document.onkeyup = (event) => {
     // initial change of text once user starts playing the game
-    instructionText.textContent = ('Press letter keys to reveal letters before you run out of chances');
+    instructionText.textContent = ('Press letter keys to solve the fruity word puzzle before you run out of chances');
+    winLossMessage.textContent = (``);
 
     // change the key press value to lowercase
     var userPlay = event.key.toLowerCase();
@@ -90,6 +130,7 @@ document.onkeyup = (event) => {
         console.log(userPlay); // can remove at end
 
         // does the userPlay match a character in the current word?
+        // if yes (winning moves & consequences)
         if (currentWord.includes(userPlay)) {
             // walk through the wordSet (current word) letter by letter
             for (var i = 0; i < currentWord.length; i++) {
@@ -108,29 +149,30 @@ document.onkeyup = (event) => {
             // if there are no more letters remaining to be guessed (the current word has no more blanks)
             if (wordBeingGuessed.includes("_") == false) {
                 // display a winning message
-                document.getElementById("gamestatus").appendChild(winMessage);
+                winLossMessage.textContent = ("You've won!");
                 // increment the wins counter by +1 
                 winsCounter += 1;
                 // update the displayed text of winsCounter: 
                 displayWins.textContent = (`Wins: ${winsCounter}`);
-                // reset the game to a new puzzle, but for now we will reset to the current puzzle
-
-                // redisplay "press any key to begin" in case they've hit F5
-                instructionText.textContent = (`Press any key to begin`);
+                // reset the game to a new puzzle (see function actions in earlier code)
+                newPuzzle();
 
             }
 
 
         }
+        // if the userPlay does not match a character in the current word...
         else {
-            // exclude letters already guessed from getting added again
+            // exclude letters already guessed from getting duplicated to wrongLetters/"You've guessed" list
             if (wrongLetters.includes(userPlay) == false) {
-                
-                // add the wrong guess to the wrongLetters array (now without the extra space!)
+                // (if the player has guessed a new wrong letter...)
+                // add the wrong guess to the wrongLetters array
                 wrongLetters.push(`${userPlay}`);
                 // the letterGuessed text area gets updated with the new wrong guess (itself plus the new guess)
                 letterGuessed.textContent += `${userPlay}, `;
+                // the chances remaining decrease by one
                 remChances -= 1;
+                // the chances remaining updates on the screen
                 remaining.textContent = (`Chances: ${remChances}`);
 
             
@@ -143,33 +185,12 @@ document.onkeyup = (event) => {
 
                 // if the player runs out of chances, what do we do?
                 if (remChances === 0) {
-                    // tell them that the game is over
+                    // display a "game over" message
+                    winLossMessage.textContent = ("Game over");
                     console.log("game over :(");
-                    // reset the chances to 12 so they can play again
-                    remChances = 12;
-                    // the line below doesn't display as Chances: 0 at all  ._.
-                    remaining.textContent = (`Chances: ${remChances}`);
-                    // reset the wrong guesses area
-                    letterGuessed.textContent = (`You've guessed: `);
-                    // clear out the wrongLetters array
-                    wrongLetters = [];
-                    // redisplay "press any key to begin"
-                    instructionText.textContent = (`Press any key to begin`);
-
-                    // reset the game to display a new puzzle to solve -- i need to turn this into a function to call
-                    // select a new currentWord
-                    var random = Math.floor(Math.random() * (wordSet.length));
-                    currentWord = wordSet[random];
-                    // create a new wordBeingGuessed string -- wordBeingGuessed needs to be reset to emptystring each time
-                    // before it is rebuilt -- somehow it got built as _ _ _ _ _ which was p e a r e, the e from apple
-                    // had stuck around -- yikes
-                    for (let j = 0; j < currentWord.length; j++) {
-                        wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
-                        console.log(wordBeingGuessed);
-                    }
-                    // assign a new word to the current word slot (underscores)
-                    gameArea.textContent = wordBeingGuessed;
                     
+                    // reset with a new (or at least randomly selected) word
+                    newPuzzle();
                 }
             }
             console.log(remChances);
@@ -179,6 +200,3 @@ document.onkeyup = (event) => {
     }
     
 }
-
-
-console.log(gameArea.textContent);
