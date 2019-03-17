@@ -23,3 +23,22 @@ h1 {
     color: purple;
     font-weight: bold;
 }
+
+input {
+    border-width: 0px;
+    color: white;
+}
+
+.form-control, .form-control:focus {
+    border: none;
+    /*border-color: #5cb85c; testing */
+    box-shadow: none; 
+    -webkit-box-shadow: none;
+    width: 0%;
+    height: 1px;
+}
+
+.has-error, .form-control:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}

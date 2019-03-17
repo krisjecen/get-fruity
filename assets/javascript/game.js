@@ -35,11 +35,9 @@ function replaceAt(string, index, replace) {
 //
 function newPuzzle() {
     // select a new puzzle from wordSet (currentWord)
-    // -- preferably one that hasn't been chosen yet! -- but this isn't a priority
+    // (stretch goal: only select a number that hasn't been chosen yet or wasn't chosen last time)
     var random = Math.floor(Math.random() * (wordSet.length));
-    //console.log(random);
     currentWord = wordSet[random];
-    //console.log(`currentWord: ${currentWord}`);
 
     // reset wordBeingGuessed to "" to avoid word-length overwrite problems
     wordBeingGuessed = "";
@@ -52,7 +50,6 @@ function newPuzzle() {
     // selected puzzle
     for (let j = 0; j < currentWord.length; j++) {
         wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
-        //console.log(wordBeingGuessed);
     }
 
     // clear out the "you've guessed" text area
@@ -73,6 +70,11 @@ function newPuzzle() {
     gameArea.textContent = wordBeingGuessed;
 }
 //
+
+function getFocus() {           
+    document.getElementById("myTextField").focus();
+  }
+
 // end of function descriptions
 
 // creating divs for game text content -- all of which updates as gameplay progresses
@@ -126,7 +128,6 @@ document.onkeyup = (event) => {
 
     // check that the userPlay is a letter, not some other key (e.g. a number, symbol, F5)
     if ("abcdefghijklmnopqrstuvwxyz".includes(userPlay)) {
-        // console.log(userPlay); // can remove at end
 
         // does the userPlay match a character in the current word?
         // if yes (winning moves & consequences)
@@ -140,7 +141,6 @@ document.onkeyup = (event) => {
                     wordBeingGuessed = replaceAt(wordBeingGuessed, i, userPlay);
                     // update the text content with the letter that the user guessed correctly
                     gameArea.textContent = wordBeingGuessed;
-                    //console.log(wordBeingGuessed);  
                 }
                 
             }
@@ -186,8 +186,6 @@ document.onkeyup = (event) => {
                     newPuzzle();
                 }
             }
-            //console.log(remChances);
-            //console.log(`wrong letters: ${wrongLetters}`);
         }
     }
     
