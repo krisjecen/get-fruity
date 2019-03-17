@@ -27,8 +27,8 @@ function replaceAt(string, index, replace) {
 //
 // newPuzzle function:
 // used for 
-// 1. initializing the game??? -- need to enter this call
-// 2. resetting the game (called after you've won or lost)
+// 1. initializing the game, and
+// 2. resetting the game (called after you've won or lost).
 // note: upon win or loss, the wins count & win/loss message displays are handled separately
 //
 function newPuzzle() {
@@ -73,29 +73,6 @@ function newPuzzle() {
 //
 // end of function descriptions
 
-// initial word selection -- or should I just run newPuzzle() to begin with???
-//
-// selector to pick one of the puzzles from the newly expanded wordSet
-var random = Math.floor(Math.random() * (wordSet.length));
-//console.log(random);
-// and assign it to our currentWord variable -- our puzzle solution
-currentWord = wordSet[random];
-//console.log(`currentWord: ${currentWord}`);
-
-
-// generating the "blank" string of underscores from the selected puzzle word
-//
-// take the currentWord and set wordBeingGuessed to its (string) value (to get the right length)
-wordBeingGuessed = currentWord;
-
-// then replace every character of wordBeingGuessed (the in-progres version that changes) with underscores "_"
-for (let j = 0; j < currentWord.length; j++) {
-    wordBeingGuessed = replaceAt(wordBeingGuessed, j, "_");
-    //console.log(wordBeingGuessed);
-}
-//
-// end of initial word selection
-
 // creating divs for game text content -- all of which updates as gameplay progresses
 //
 // win/loss message area -- updates when the player wins or loses
@@ -130,6 +107,9 @@ document.getElementById("wrongLetters").appendChild(letterGuessed);
 //
 // end of creating divs for game text content
 
+// initializing the game
+newPuzzle();
+//
 
 // gameplay!
 //

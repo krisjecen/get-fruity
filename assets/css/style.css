@@ -11,3 +11,15 @@ h1 {
     font-weight: bold;
     letter-spacing: 0.5em;
 }
+
+.jumbotron {
+    background-image: url("../images/fruitbasket.png");
+    background-size: cover;
+    color: aliceblue;
+    text-shadow: 1px 1px #aaaacc;
+}
+
+#gamestatus {
+    color: purple;
+    font-weight: bold;
+}
