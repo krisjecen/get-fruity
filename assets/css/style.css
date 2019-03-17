@@ -25,13 +25,14 @@ h1 {
 }
 
 input {
-    border-width: 0px;
-    color: white;
+    border: none;
+    color: transparent;
 }
 
 .form-control, .form-control:focus {
     border: none;
-    /*border-color: #5cb85c; testing */
+    border-color: #5cb85c;
+    color: transparent;
     box-shadow: none; 
     -webkit-box-shadow: none;
     width: 0%;
