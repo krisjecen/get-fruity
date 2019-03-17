@@ -2,6 +2,8 @@
 ## Welcome to Get Fruity! the word guess game
 :strawberry: :peach: :orange: :lemon: :green_apple: :melon: :watermelon: :cherries:
 
+[Play Get Fruity! on desktop or mobile](https://krisjecen.github.io/word-guess-game/)
+
 What fruit could be listed below, hidden behind the blanks?
 
 Use your keyboard to spell out the name of the fruit!
