@@ -109,6 +109,22 @@ var letterGuessed = document.createElement("div");
 letterGuessed.textContent = (`You've guessed: `);
 document.getElementById("wrongLetters").appendChild(letterGuessed);
 //
+// attempt to capture mobile keyboard input
+//var mobilekey = document.getElementById("myTextField").getAttribute('value');
+//var mobiletyping = mobilekey.value;
+var mobileKeys = [];
+var keyCounter = -1;
+var mobileInput = [];
+mobileInput = document.getElementById('myTextField');
+// document.querySelector('input.form-control').addEventListener('input', function (e) {
+
+//     //prevent the normal submission of the form
+//     e.preventDefault();
+
+//     console.log(mobileInput.value);    
+//     //mobileInput.value.charAt() attempting to grab the last character in the input field
+// });
+
 // end of creating divs for game text content
 
 // initializing the game
@@ -125,6 +141,28 @@ document.onkeyup = (event) => {
 
     // change the key press value to lowercase
     var userPlay = event.key.toLowerCase();
+
+    // testing mobile key capture: if any input happens in the text field that comes into focus after
+    // clicking the "On mobile?" button...
+    document.querySelector('input.form-control').addEventListener('input', function (e) {
+
+        //prevent the normal action
+        e.preventDefault();
+       
+        // for testing... let's capture whatever is in the text field
+        console.log(`mobileInput: ${mobileInput.value}`);
+
+        // select the last character in the text field (they could backspace but it would just run the same
+        // letter again which shouldn't change anything in the gameplay)
+        // assign the last character to appear in the text field to a variable
+        mobileKeys = mobileInput.value.substr(-1);
+        console.log(`mobileKeys: ${mobileKeys}`); 
+
+        // set the userPlay equal to mobileKeys in this case, same toLowerCase() treatment as above
+        userPlay = mobileKeys.toLowerCase();
+    });
+
+    
 
     // check that the userPlay is a letter, not some other key (e.g. a number, symbol, F5)
     if ("abcdefghijklmnopqrstuvwxyz".includes(userPlay)) {
