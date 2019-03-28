@@ -8,10 +8,14 @@ var winsCounter = 0;    //  counter for how many times the player has won
 var remChances = 10;    //  counter for remaining chances (how many more times the player can guess before they lose)
 var currentWord = "";   //  initializing the chosen word (to be guessed) as an empty string
 var wordBeingGuessed = "";  // initializing the in-progress word (will be shown as a underscores "_") as an empty string
+var userPlay = null;
+var lastPlay = null;
+var lastPuzzle = "";
+
 //
 // the set of words used in Get Fruity's puzzles, one will be picked at random at the beginning of each game
 var wordSet = ["pear", "apple", "persimmon", "canteloupe", "pineapple", "durian", "avocado",
-"cranberry", "pomegranate", "jackfruit", "cherry", "papaya", "mango", "honeydew", "apricot", 
+"cranberry", "pomegranate", "jackfruit", "cherry", "papaya", "mango", "honeydew", "apricot",
 "lychee", "pomelo", "kiwi"];
 //
 // end of variables
@@ -28,7 +32,7 @@ function replaceAt(string, index, replace) {
 }
 //
 // newPuzzle function:
-// used for 
+// used for
 // 1. initializing the game, and
 // 2. resetting the game (called after you've won or lost).
 // note: upon win or loss, the wins count & win/loss message displays are handled separately
@@ -36,16 +40,28 @@ function replaceAt(string, index, replace) {
 function newPuzzle() {
     // select a new puzzle from wordSet (currentWord)
     // (stretch goal: only select a number that hasn't been chosen yet or wasn't chosen last time)
+    // reset
+    userPlay = null;
+    mobileKeys = [];
     var random = Math.floor(Math.random() * (wordSet.length));
     currentWord = wordSet[random];
+    
+    // to avoid serving up the same puzzle twice in a row
+    // if the current word is the same as we served last time, run newPuzzle til it's different
+    if (currentWord === lastPuzzle) {
+        newPuzzle();
+    }
+
+    // assign the current word to the lastPuzzle variable which will check for repeats next game
+    lastPuzzle = currentWord;
 
     // reset wordBeingGuessed to "" to avoid word-length overwrite problems
     wordBeingGuessed = "";
-    
+
     // set wordBeingGuessed to the currentWord, which will get overwritten in the
     // following for loop
     wordBeingGuessed = currentWord;
-    
+
     // generate a new string of underscores to go along with the newly
     // selected puzzle
     for (let j = 0; j < currentWord.length; j++) {
@@ -68,10 +84,99 @@ function newPuzzle() {
 
     // update the gameplay area to show the new string of underscores
     gameArea.textContent = wordBeingGuessed;
+
+}
+//
+// check that the userPlay is a letter, not some other key (e.g. a number, symbol, F5)
+function gameplay() {
+
+    if ("abcdefghijklmnopqrstuvwxyz".includes(userPlay)) {
+        
+        // detele console.log later
+        //console.log(`the letter ${userPlay} was played.`);
+        
+        // update instruction and winLoss texts once the player has started the next game.
+        // the text will update when the player has made any plays in the game
+        if  (wrongLetters.length === 1 || wordBeingGuessed.match(/_/g)!=wordBeingGuessed.length) {
+            instructionText.textContent = ('Press letter keys to solve the fruity word puzzle before you run out of chances');
+            winLossMessage.textContent = (``);
+        }
+
+        // lastPlay is used to throttle the onkeyup input function so gameplay doesn't run through
+        // multiple times from a single letter input
+        lastPlay = userPlay;
+
+        // does the userPlay match a character in the current word?
+        // if yes (winning moves & consequences)
+        if (currentWord.includes(userPlay)) {
+            // walk through the wordSet (current word) letter by letter
+            for (var i = 0; i < currentWord.length; i++) {
+                // if the userPlay is the same as the character at that index in the current word
+                if (userPlay === currentWord[i]) {
+                    // take the in-progress word, go to the indexed character, and
+                    // replace it with the userPlay
+                    wordBeingGuessed = replaceAt(wordBeingGuessed, i, userPlay);
+                    // update the text content with the letter that the user guessed correctly
+                    gameArea.textContent = wordBeingGuessed;
+                }
+
+            }
+
+            // if there are no more letters remaining to be guessed (the current word has no more blanks)
+            if (wordBeingGuessed.includes("_") == false) {
+                // clear userPlay
+                userPlay = null;
+                // display a winning message
+                winLossMessage.textContent = (`You've won! Good job guessing ${currentWord}!`);
+                // increment the wins counter by +1
+                winsCounter += 1;
+                // update the displayed text of winsCounter:
+                displayWins.textContent = (`Wins: ${winsCounter}`);
+                // reset the game to a new puzzle (see function actions in earlier code)
+                newPuzzle();
+
+            }
+
+        }
+        // if the userPlay does not match a character in the current word...
+        else {
+            // exclude letters already guessed from getting duplicated to wrongLetters/"You've guessed" list
+            if (wrongLetters.includes(userPlay) == false) {
+                // (if the player has guessed a new wrong letter...)
+                // add the wrong guess to the wrongLetters array
+                wrongLetters.push(`${userPlay}`);
+                // the letterGuessed text area gets updated with the new wrong guess (itself plus the new guess)
+                letterGuessed.textContent += `${userPlay}, `;
+                // clear userPlay
+                userPlay = null;
+                // the chances remaining decrease by one
+                remChances -= 1;
+                // the chances remaining updates on the screen
+                remaining.textContent = (`Chances: ${remChances}`);
+
+                // if the player gets down to 1 chance, add a "last chance!" reminder
+                if (remChances === 1) {
+                    remaining.textContent = (`Chances: ${remChances} -- this is your last chance!`);
+                }
+
+                // if the player runs out of chances...
+                if (remChances === 0) {
+                    // display a "game over" message
+                    winLossMessage.textContent = ("Game over. Better luck on the next fruit.");
+                    // reset with a new (or at least randomly selected) word
+                    newPuzzle();
+                }
+
+            }
+
+        }
+
+    }
+
 }
 //
 
-function getFocus() {           
+function getFocus() {
     document.getElementById("myTextField").focus();
   }
 
@@ -109,25 +214,19 @@ var letterGuessed = document.createElement("div");
 letterGuessed.textContent = (`You've guessed: `);
 document.getElementById("wrongLetters").appendChild(letterGuessed);
 //
+// end of creating divs for game text content
+
+
 // attempt to capture mobile keyboard input
 //var mobilekey = document.getElementById("myTextField").getAttribute('value');
 //var mobiletyping = mobilekey.value;
 var mobileKeys = [];
-var keyCounter = -1;
 var mobileInput = [];
 mobileInput = document.getElementById('myTextField');
-// document.querySelector('input.form-control').addEventListener('input', function (e) {
+//
+// end of mobile keyboard input attempt initial statements
 
-//     //prevent the normal submission of the form
-//     e.preventDefault();
-
-//     console.log(mobileInput.value);    
-//     //mobileInput.value.charAt() attempting to grab the last character in the input field
-// });
-
-// end of creating divs for game text content
-
-// initializing the game
+// initializing the game -- calling the newPuzzle() function
 newPuzzle();
 //
 
@@ -135,100 +234,63 @@ newPuzzle();
 //
 // the whole game is driven by the user pressing keys and they key value being captured upon release (key up)
 document.onkeyup = (event) => {
-    // initial change of text once user starts playing the game
-    instructionText.textContent = ('Press letter keys to solve the fruity word puzzle before you run out of chances');
-    winLossMessage.textContent = (``);
-
     // change the key press value to lowercase
-    var userPlay = event.key.toLowerCase();
-
-    // testing mobile key capture: if any input happens in the text field that comes into focus after
-    // clicking the "On mobile?" button...
-    document.querySelector('input.form-control').addEventListener('input', function (e) {
-
-        //prevent the normal action
-        e.preventDefault();
-       
-        // for testing... let's capture whatever is in the text field
-        console.log(`mobileInput: ${mobileInput.value}`);
-
-        // select the last character in the text field (they could backspace but it would just run the same
-        // letter again which shouldn't change anything in the gameplay)
-        // assign the last character to appear in the text field to a variable
-        mobileKeys = mobileInput.value.substr(-1);
-        console.log(`mobileKeys: ${mobileKeys}`); 
-
-        // set the userPlay equal to mobileKeys in this case, same toLowerCase() treatment as above
-        userPlay = mobileKeys.toLowerCase();
-    });
-
+    userPlay = event.key.toLowerCase();
     
+    // will delete later
+    //console.log(`activity from onkeyup`);
 
-    // check that the userPlay is a letter, not some other key (e.g. a number, symbol, F5)
-    if ("abcdefghijklmnopqrstuvwxyz".includes(userPlay)) {
-
-        // does the userPlay match a character in the current word?
-        // if yes (winning moves & consequences)
-        if (currentWord.includes(userPlay)) {
-            // walk through the wordSet (current word) letter by letter
-            for (var i = 0; i < currentWord.length; i++) {
-                // if the userPlay is the same as the character at that index in the current word
-                if (userPlay === currentWord[i]) {
-                    // take the in-progress word, go to the indexed character, and
-                    // replace it with the userPlay
-                    wordBeingGuessed = replaceAt(wordBeingGuessed, i, userPlay);
-                    // update the text content with the letter that the user guessed correctly
-                    gameArea.textContent = wordBeingGuessed;
-                }
-                
-            }
-            
-            // if there are no more letters remaining to be guessed (the current word has no more blanks)
-            if (wordBeingGuessed.includes("_") == false) {
-                // display a winning message
-                winLossMessage.textContent = (`You've won! Good job guessing ${currentWord}!`);
-                // increment the wins counter by +1 
-                winsCounter += 1;
-                // update the displayed text of winsCounter: 
-                displayWins.textContent = (`Wins: ${winsCounter}`);
-                // reset the game to a new puzzle (see function actions in earlier code)
-                newPuzzle();
-
-            }
-
-        }
-        // if the userPlay does not match a character in the current word...
-        else {
-            // exclude letters already guessed from getting duplicated to wrongLetters/"You've guessed" list
-            if (wrongLetters.includes(userPlay) == false) {
-                // (if the player has guessed a new wrong letter...)
-                // add the wrong guess to the wrongLetters array
-                wrongLetters.push(`${userPlay}`);
-                // the letterGuessed text area gets updated with the new wrong guess (itself plus the new guess)
-                letterGuessed.textContent += `${userPlay}, `;
-                // the chances remaining decrease by one
-                remChances -= 1;
-                // the chances remaining updates on the screen
-                remaining.textContent = (`Chances: ${remChances}`);
-
-                // if the player gets down to 1 chance, add a "last chance!" reminder
-                if (remChances === 1) {
-                    remaining.textContent = (`Chances: ${remChances} -- this is your last chance!`);
-                }
-
-                // if the player runs out of chances...
-                if (remChances === 0) {
-                    // display a "game over" message
-                    winLossMessage.textContent = ("Game over. Better luck on the next fruit.");
-                    // reset with a new (or at least randomly selected) word
-                    newPuzzle();
-                }
-            }
-        }
+    // checks to see if this function is just running because the text field receieved input
+    // (from the eventlistener below), or if the user has just played the same key again, which
+    // shouldn't result in anything new happening
+    if (userPlay === lastPlay) {
+        userPlay = null;
     }
-    
+    // starts the gameplay (might pass in a "null" value but that will get filtered in gameplay)
+    gameplay();
 }
 //
+//
+// mobile gameplay -- Beta!
+// testing mobile key capture: if any input happens in the text field that comes into focus after
+// clicking the "On mobile?" button...
+document.querySelector('input.form-control').addEventListener('input', function (e) {
+
+    //prevent the normal action
+    e.preventDefault();
+
+    // will delete later
+
+    // for testing... let's capture whatever is in the text field
+    //console.log(`mobileInput: ${mobileInput.value}`);
+
+    // select the last character in the text field (they could backspace but it would just run the same
+    // letter again which shouldn't change anything in the gameplay)
+    // assign the last character to appear in the text field to a variable
+    mobileKeys = mobileInput.value.substr(-1);
+    //console.log(`mobileKeys: ${mobileKeys}`);
+
+    // set the userPlay equal to mobileKeys in this case, same toLowerCase() treatment as above
+    userPlay = mobileKeys.toLowerCase();
+
+    // cleans up the input in case it is visible somehow
+    document.getElementById("myTextField").value = "";
+    mobileKeys = "";
+
+    // will delete later
+    // console.log(`mobileKeys: ${mobileKeys}`);
+    // console.log(`activity from form input`);
+
+    // checks to see if this function is just running because the text field receieved input
+    // or if the user has just played the same key again, which shouldn't result in anything new happening.
+    // I'm not convinced this if statement is necessary, but still testing.
+    if (userPlay === lastPlay) {
+        userPlay = null;
+    }
+    // starts the gameplay (might pass in a "null" value but that will get filtered in gameplay)
+    gameplay();
+});
+//
 // end of gameplay
-// 
+//
 // end of game code

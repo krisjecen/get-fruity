@@ -33,11 +33,11 @@ input {
     /* currently testing trying to capture mobile key input*/
     border: none;
     /* border-color: #5cb85c; */
-    /*color: black;*/
+    /* color: black; */
     color: transparent;
     box-shadow: none; 
     -webkit-box-shadow: none;
-    width: 0%;
+    width: 1%;
     height: 1px;
 }
 
