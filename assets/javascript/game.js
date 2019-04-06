@@ -11,6 +11,7 @@ var wordBeingGuessed = "";  // initializing the in-progress word (will be shown 
 var userPlay = null;
 var lastPlay = null;
 var lastPuzzle = "";
+var newGameDelay = null;
 
 //
 // the set of words used in Get Fruity's puzzles, one will be picked at random at the beginning of each game
@@ -39,8 +40,9 @@ function replaceAt(string, index, replace) {
 //
 function newPuzzle() {
     // select a new puzzle from wordSet (currentWord)
-    // (stretch goal: only select a number that hasn't been chosen yet or wasn't chosen last time)
     // reset
+    clearTimeout(newGameDelay);
+    console.log(newGameDelay);
     userPlay = null;
     mobileKeys = [];
     var random = Math.floor(Math.random() * (wordSet.length));
@@ -95,6 +97,7 @@ function gameplay() {
         // detele console.log later
         //console.log(`the letter ${userPlay} was played.`);
         
+        // try using setTimeout on the newPuzzle function when it's called at the end of the game?
         // update instruction and winLoss texts once the player has started the next game.
         // the text will update when the player has made any plays in the game
         if  (wrongLetters.length === 1 || wordBeingGuessed.match(/_/g)!=wordBeingGuessed.length) {
@@ -133,7 +136,9 @@ function gameplay() {
                 // update the displayed text of winsCounter:
                 displayWins.textContent = (`Wins: ${winsCounter}`);
                 // reset the game to a new puzzle (see function actions in earlier code)
-                newPuzzle();
+                // what if we put this into a setTimeout?
+                newGameDelay = setTimeout(newPuzzle, 1500);
+                console.log(newGameDelay);
 
             }
 
