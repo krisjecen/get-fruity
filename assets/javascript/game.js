@@ -91,9 +91,6 @@ function newPuzzle () {
 // check that the userPlay is a letter, not some other key (e.g. a number, symbol, F5)
 function gameplay () {
   if ('abcdefghijklmnopqrstuvwxyz'.includes(userPlay)) {
-    // detele console.log later
-    // console.log(`the letter ${userPlay} was played.`);
-
     // try using setTimeout on the newPuzzle function when it's called at the end of the game?
     // update instruction and winLoss texts once the player has started the next game.
     // the text will update when the player has made any plays in the game
@@ -170,9 +167,11 @@ function gameplay () {
 }
 //
 
-// function getFocus () {
-//   document.getElementById('myTextField').focus()
-// }
+/* eslint-disable no-unused-vars */
+function getFocus () {
+  document.getElementById('myTextField').focus()
+}
+/* eslint-enable no-unused-vars */
 
 // end of function descriptions
 
@@ -230,9 +229,6 @@ document.onkeyup = (event) => {
   // change the key press value to lowercase
   userPlay = event.key.toLowerCase()
 
-  // will delete later
-  // console.log(`activity from onkeyup`);
-
   // checks to see if this function is just running because the text field receieved input
   // (from the eventlistener below), or if the user has just played the same key again, which
   // shouldn't result in anything new happening
@@ -250,12 +246,6 @@ document.onkeyup = (event) => {
 document.querySelector('input.form-control').addEventListener('input', function (e) {
   // prevent the normal action
   e.preventDefault()
-
-  // will delete later
-
-  // for testing... let's capture whatever is in the text field
-  // console.log(`mobileInput: ${mobileInput.value}`);
-
   // select the last character in the text field (they could backspace but it would just run the same
   // letter again which shouldn't change anything in the gameplay)
   // assign the last character to appear in the text field to a variable
@@ -268,10 +258,6 @@ document.querySelector('input.form-control').addEventListener('input', function 
   // cleans up the input in case it is visible somehow
   document.getElementById('myTextField').value = ''
   mobileKeys = ''
-
-  // will delete later
-  // console.log(`mobileKeys: ${mobileKeys}`);
-  // console.log(`activity from form input`);
 
   // checks to see if this function is just running because the text field receieved input
   // or if the user has just played the same key again, which shouldn't result in anything new happening.
