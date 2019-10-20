@@ -240,6 +240,25 @@ document.onkeyup = (event) => {
 }
 //
 //
+// =============================================================================
+// HELLO AIRBNB REVIEWERS! You're in the right place.
+// vvv Check out the code I want to highlight below vvv
+// =============================================================================
+/* Context:
+I made this JavaScript-based game called Get Fruity where you guess letters to try to reveal
+the name of a fruit.
+
+The original assignment specified for us to use onkeyup events to capture letter inputs,
+which meant it only worked if you were using a physical keyboard (e.g. on desktop / laptop).
+I wanted my game to be playable by more users (e.g. people with mobile devices), so I wrote
+extra code to expand its playability for users who were using touch screens. I added a
+button for them to press to signify they’d be tapping instead of physically keying, and then
+captured their mobile keyboard input in a hidden text field that I could access for gameplay.
+the feature is still in progress, but so far it seems to work on Chrome on Android devices
+(and maybe on your device, too! I would appreciate your feedback).
+*/
+//
+//
 // mobile gameplay -- Beta!
 // testing mobile key capture: if any input happens in the text field that comes into focus after
 // clicking the "On mobile?" button...
@@ -250,7 +269,6 @@ document.querySelector('input.form-control').addEventListener('input', function 
   // letter again which shouldn't change anything in the gameplay)
   // assign the last character to appear in the text field to a variable
   mobileKeys = mobileInput.value.substr(-1)
-  // console.log(`mobileKeys: ${mobileKeys}`);
 
   // set the userPlay equal to mobileKeys in this case, same toLowerCase() treatment as above
   userPlay = mobileKeys.toLowerCase()
