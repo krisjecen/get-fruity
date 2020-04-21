@@ -2,7 +2,7 @@
 ## Welcome to Get Fruity! the word guess game
 :strawberry: :peach: :orange: :lemon: :green_apple: :melon: :watermelon: :cherries:
 
-## [Play Get Fruity!](https://krisjecen.github.io/word-guess-game/)
+## [Play Get Fruity!](https://krisjecen.github.io/get-fruity/)
 
 Can you fill in the blanks to spell out the name of the fruit?
 
